@@ -16,7 +16,12 @@ from resources.store import StoreList
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///data.db')
+db_URL = 'sqlite:///data.db'
+if (env_url := os.environ.get('DATABASE_URL')):
+    split_url = env_url.split(':')
+    split_url[0] = 'postgresql'
+    db_URL = ':'.join(split_url)
+app.config['SQLALCHEMY_DATABASE_URI'] = db_URL
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'deFcon_11'
 api = Api(app)
